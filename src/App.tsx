@@ -1,13 +1,21 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import TableConfiguration from "./componentes/TableConfiguration";
+import NumberTable from "./componentes/NumberTable";
+import UserNavbar from "./componentes/NavbarUser";
+import UsersList from "./componentes/UsersList";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <>
-      <h1>Hola Mundo en Grande</h1>
-      <p>
-        Este es un ejemplo básico de un componente React que muestra un mensaje en grande.
-      </p>
-    </>
+    <Router>
+      <UserNavbar />
+      <Routes>
+        <Route path="/" element={<NumberTable />} />
+        <Route path="/config" element={<TableConfiguration />} />
+        <Route path="/users" element={<UsersList />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
