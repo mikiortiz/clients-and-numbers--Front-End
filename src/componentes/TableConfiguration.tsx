@@ -1,25 +1,49 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Typography, TextField } from "@mui/material";
+import {
+  Button,
+  Typography,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import MyApi from "../services/MyApi";
 
 const Home: React.FC = () => {
   const [startNumber, setStartNumber] = useState("");
   const [endNumber, setEndNumber] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleGenerateTable = async () => {
-    const start = parseInt(startNumber);
-    const end = parseInt(endNumber);
+    const parsedStart = parseInt(startNumber);
+    const parsedEnd = parseInt(endNumber);
 
-    if (!isNaN(start) && !isNaN(end)) {
+    // Verificar si la conversión fue exitosa y ambos valores son números válidos
+    if (!isNaN(parsedStart) && !isNaN(parsedEnd)) {
+      setOpenDialog(true);
+    } else {
+      console.error("Los valores de inicio y fin deben ser números válidos.");
+    }
+  };
+
+  const confirmGenerateTable = async () => {
+    const parsedStart = parseInt(startNumber);
+    const parsedEnd = parseInt(endNumber);
+
+    if (!isNaN(parsedStart) && !isNaN(parsedEnd)) {
       try {
-        await MyApi.saveNumberRange(start, end);
-
+        await MyApi.saveNumberRange(parsedStart, parsedEnd);
         navigate("/");
       } catch (error) {
         console.error("Error al guardar el rango de números:", error);
+      } finally {
+        setOpenDialog(false);
       }
+    } else {
+      console.error("Los valores de inicio y fin deben ser números válidos.");
     }
   };
 
@@ -57,6 +81,23 @@ const Home: React.FC = () => {
           Generar Tabla
         </Button>
       </div>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>Confirmación</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            ¿Está seguro de generar una nueva tabla? Esta acción eliminará la
+            tabla actual y todos sus usuarios y números relacionados.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={confirmGenerateTable} color="primary">
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
