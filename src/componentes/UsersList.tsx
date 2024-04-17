@@ -1,18 +1,45 @@
-import React from "react";
-import { Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, Typography, Grid } from "@mui/material";
+import MyApi from "../services/MyApi";
+import User from "../model/UserType";
 
-const Home: React.FC = () => {
+const UsersList: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const fetchedUsers = await MyApi.getUsers();
+        setUsers(fetchedUsers);
+      } catch (error) {
+        console.error("Error al obtener la lista de usuarios:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
-    <div>
-      <Typography variant="h3" align="center" gutterBottom>
-        Bienvenido a esta seccion de la App
-      </Typography>
-      <Typography variant="body1" align="center" paragraph>
-        Esta sección contendrá todos los usuarios que se van agregando a la
-        aplicación, incluyendo sus datos.
-      </Typography>
-    </div>
+    <Grid container spacing={3}>
+      {users.map((user) => (
+        <Grid item key={user._id} xs={12} sm={6} md={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5" component="div">
+                {user.firstName} {user.lastName}
+              </Typography>
+              <Typography color="textSecondary" gutterBottom>
+                usuario: {user.username}
+              </Typography>
+              <Typography variant="body2" component="p">
+                Números asociados: {user.numbers.join(", ")}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 
-export default Home;
+export default UsersList;
