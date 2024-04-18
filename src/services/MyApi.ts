@@ -56,7 +56,7 @@ const MyApi = {
   addUser(newUser: User): Promise<User> {
     return axios
       .post<User>(
-        "https://clients-and-numbers-a5c8f17020a9.herokuapp.com/api/register",
+        "https://clients-and-numbers-a5c8f17020a9.herokuapp.com/api/scheduleUser",
         newUser
       )
       .then((response: ApiResponse<User>) => response.data)
