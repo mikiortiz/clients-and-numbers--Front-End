@@ -132,11 +132,6 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
         <Button onClick={handleAddUser} color="primary">
           {showExistingUserForm ? "Agregar Número" : "Agregar"}
         </Button>
-        <Button onClick={() => setShowExistingUserForm(!showExistingUserForm)}>
-          {showExistingUserForm
-            ? "Agregar Nuevo Usuario"
-            : "Agregar Número a Usuario Existente"}
-        </Button>
         <Button onClick={onClose} color="secondary">
           Cancelar
         </Button>
