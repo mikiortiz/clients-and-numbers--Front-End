@@ -36,7 +36,7 @@ const Home: React.FC = () => {
     if (!isNaN(parsedStart) && !isNaN(parsedEnd)) {
       try {
         await MyApi.saveNumberRange(parsedStart, parsedEnd);
-        navigate("/");
+        navigate("/numbers");
       } catch (error) {
         console.error("Error al guardar el rango de números:", error);
       } finally {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Chip, CircularProgress, Typography } from "@mui/material";
-import AddUserDialog from "./AddUserDialog";
-import NumberInfoDialog from "./NumberInfoDialog";
+import AddUserDialog from "../componentes/AddUserDialog";
+import NumberInfoDialog from "../componentes/NumberInfoDialog";
 import MyApi from "../services/MyApi";
 
 const NumberTable: React.FC = () => {
