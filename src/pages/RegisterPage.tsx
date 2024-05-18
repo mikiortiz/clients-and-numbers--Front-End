@@ -29,7 +29,27 @@ const RegisterComponent = () => {
   };
 
   const handleAuthError = (error: any) => {
-    // Manejar errores de autenticación
+    if (error?.response?.data) { // Check for response data
+      const responseData = error.response.data;
+
+      if (Array.isArray(responseData)) {
+        // Yup validation errors (assuming same structure as Login example)
+        const mappedErrors = responseData.map((err) => ({
+          field: err.field, // Assuming field property exists
+          message: err.message,
+        }));
+        setFormErrors(mappedErrors); // Set form errors with formatted messages
+      } else if (typeof responseData === 'string') {
+        // Other server errors (single error message)
+        setFormErrors([{ message: responseData }]);
+      } else {
+        // Unknown error structure
+        setFormErrors([{ message: 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.' }]);
+      }
+    } else {
+      console.log("Error desconocido durante el registro:", error);
+      setFormErrors([{ message: 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.' }]);
+    }
   };
 
   return (
