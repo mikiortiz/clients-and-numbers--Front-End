@@ -51,22 +51,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await registerRequest(userData);
       if (response && response.data) {
-        const { data, headers } = response;
-        if (headers.authorization) {
-          const token = headers.authorization.split(" ")[1];
-          localStorage.setItem("token", token);
-          setUser(data);
-          setIsAuthenticated(true);
-        } else {
-          // Manejar el caso si no hay token en la respuesta
-          console.error("El servidor no proporcionó un token de autorización.");
-        }
+        const { data } = response;
+        setUser(data);
+        setIsAuthenticated(false);
       }
     } catch (error) {
       handleAuthError(error);
     }
   };
-  
 
   const signIn = async (credentials: UserRegistrationData): Promise<void> => {
     try {
@@ -132,22 +124,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       try {
-        const res = await verifyTokenRequest();
+        const res = await verifyTokenRequest(token);
+
         if (!res.data) {
-          console.log("entrando a data negativa", res.data);
           setIsAuthenticated(false);
           setLoading(false);
           return;
         }
+
         setIsAuthenticated(true);
         setUser(res.data);
         setLoading(false);
       } catch (error) {
+        console.error("Error al verificar el token:", error);
         setIsAuthenticated(false);
         setUser(null);
         setLoading(false);
       }
     }
+
     checkLogin();
   }, []);
 

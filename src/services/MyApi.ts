@@ -10,7 +10,7 @@ const MyApi = {
       };
       console.log("peticion en la carga de numeros:", jwtToken);
       const numberRange = { start, end };
-      console.log("carga de numeros:", start, end);
+      console.log("carga de numeros:", start, end,);
       const response = await axios.post("/numbers", numberRange, {
         headers: headers,
       });

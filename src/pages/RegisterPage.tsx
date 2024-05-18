@@ -1,68 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../context/authContext';
-import { useNavigate } from 'react-router-dom';
+import { Alert, Button, TextField } from '@mui/material';
 
 const RegisterComponent = () => {
-  const { signup, isAuthenticated, authErrors } = useAuth();
+  const { signup, authErrors } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     username: '',
     password: '',
   });
-  const [formErrors, setFormErrors] = useState<any>({}); // Added state for form errors
-  const navigate = useNavigate();
+  const [formErrors, setFormErrors] = useState<any>({});
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setFormErrors((prevErrors: any) => ({ ...prevErrors, [name]: "" })); // Clear error on change
+    setFormErrors((prevErrors: any) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleRegister = async () => {
     try {
       await signup(formData);
+      setRegistrationSuccess(true);
     } catch (error) {
       console.log('Error al registrar:', error);
-
-      handleAuthError(error); // Call new function to handle errors
+      handleAuthError(error);
     }
   };
 
   const handleAuthError = (error: any) => {
-    if (error?.response?.data) { // Check for response data
-      const responseData = error.response.data;
-
-      if (Array.isArray(responseData)) {
-        // Yup validation errors (assuming same structure as Login example)
-        const mappedErrors = responseData.map((err) => ({
-          field: err.field, // Assuming field property exists
-          message: err.message,
-        }));
-        setFormErrors(mappedErrors); // Set form errors with formatted messages
-      } else if (typeof responseData === 'string') {
-        // Other server errors (single error message)
-        setFormErrors([{ message: responseData }]);
-      } else {
-        // Unknown error structure
-        setFormErrors([{ message: 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.' }]);
-      }
-    } else {
-      console.log("Error desconocido durante el registro:", error);
-      setFormErrors([{ message: 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.' }]);
-    }
+    // Manejar errores de autenticación
   };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      console.log("registro:", isAuthenticated);
-      navigate('/login');
-    }
-  }, [isAuthenticated, navigate]);
 
   return (
     <div>
       <h2>Registro</h2>
-      <input
+      <TextField
         type="text"
         placeholder="Correo Electrónico"
         name="email"
@@ -70,9 +43,9 @@ const RegisterComponent = () => {
         onChange={handleChange}
       />
       {formErrors.email && (
-        <p style={{ color: 'red', marginTop: '0.5rem' }}>{formErrors.email.message}</p>
-      )} {/* Display email error message */}
-      <input
+        <Alert severity="error" sx={{ mt: 1 }}>{formErrors.email.message}</Alert>
+      )}
+      <TextField
         type="text"
         placeholder="Nombre de Usuario"
         name="username"
@@ -80,9 +53,9 @@ const RegisterComponent = () => {
         onChange={handleChange}
       />
       {formErrors.username && (
-        <p style={{ color: 'red', marginTop: '0.5rem' }}>{formErrors.username.message}</p>
-      )} {/* Display username error message */}
-      <input
+        <Alert severity="error" sx={{ mt: 1 }}>{formErrors.username.message}</Alert>
+      )}
+      <TextField
         type="password"
         placeholder="Contraseña"
         name="password"
@@ -90,18 +63,19 @@ const RegisterComponent = () => {
         onChange={handleChange}
       />
       {formErrors.password && (
-        <p style={{ color: 'red', marginTop: '0.5rem' }}>{formErrors.password.message}</p>
-      )} {/* Display password error message */}
-      <button onClick={handleRegister}>Registrarse</button>
+        <Alert severity="error" sx={{ mt: 1 }}>{formErrors.password.message}</Alert>
+      )}
+      <Button onClick={handleRegister} variant="contained" sx={{ mt: 2 }}>Registrarse</Button>
       {authErrors && Array.isArray(authErrors) && (
         <div style={{ marginTop: '1rem' }}>
           {authErrors.map((error, index) => (
-            <p key={index} style={{ color: 'red', marginTop: '0.5rem' }}>
-              {error.message}
-            </p>
+            <Alert key={index} severity="error" sx={{ mt: 1 }}>{error.message}</Alert>
           ))}
         </div>
-      )} {/* Display general auth errors */}
+      )}
+      {registrationSuccess && (
+        <Alert severity="success" sx={{ mt: 2 }}>¡Registrado con éxito!</Alert>
+      )}
     </div>
   );
 };

@@ -9,7 +9,10 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-const [formErrors, setFormErrors] = useState<Record<string, string | undefined>>({});  const navigate = useNavigate();
+  const [formErrors, setFormErrors] = useState<
+    Record<string, string | undefined>
+  >({});
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
