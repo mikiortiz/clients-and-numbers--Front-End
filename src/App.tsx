@@ -10,6 +10,8 @@ import RegisterPage from "./pages/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
 import { AuthProvider } from "./context/authContext";
 import ClientProvider from "./context/clientsContext";
+import "tailwindcss/tailwind.css";
+import './index.css';
 
 const App: React.FC = () => {
   return (

@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/authContext';
-import { Alert, Button, TextField } from '@mui/material';
 
 const RegisterComponent = () => {
   const { signup, authErrors } = useAuth();
@@ -18,7 +17,8 @@ const RegisterComponent = () => {
     setFormErrors((prevErrors: any) => ({ ...prevErrors, [name]: "" }));
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       await signup(formData);
       setRegistrationSuccess(true);
@@ -29,23 +29,15 @@ const RegisterComponent = () => {
   };
 
   const handleAuthError = (error: any) => {
-    if (error?.response?.data) { // Check for response data
-      const responseData = error.response.data;
-
-      if (Array.isArray(responseData)) {
-        // Yup validation errors (assuming same structure as Login example)
-        const mappedErrors = responseData.map((err) => ({
-          field: err.field, // Assuming field property exists
-          message: err.message,
-        }));
-        setFormErrors(mappedErrors); // Set form errors with formatted messages
-      } else if (typeof responseData === 'string') {
-        // Other server errors (single error message)
-        setFormErrors([{ message: responseData }]);
-      } else {
-        // Unknown error structure
-        setFormErrors([{ message: 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.' }]);
-      }
+    if (error.response && error.response.data && error.response.data.errors) {
+      const serverErrors = error.response.data.errors;
+      const mappedErrors: any = {};
+      serverErrors.forEach((err: any) => {
+        mappedErrors[err.field] = `${
+          err.field.charAt(0).toUpperCase() + err.field.slice(1)
+        } ${err.message}`;
+      });
+      setFormErrors(mappedErrors);
     } else {
       console.log("Error desconocido durante el registro:", error);
       setFormErrors([{ message: 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.' }]);
@@ -53,49 +45,72 @@ const RegisterComponent = () => {
   };
 
   return (
-    <div>
-      <h2>Registro</h2>
-      <TextField
-        type="text"
-        placeholder="Correo Electrónico"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      {formErrors.email && (
-        <Alert severity="error" sx={{ mt: 1 }}>{formErrors.email.message}</Alert>
-      )}
-      <TextField
-        type="text"
-        placeholder="Nombre de Usuario"
-        name="username"
-        value={formData.username}
-        onChange={handleChange}
-      />
-      {formErrors.username && (
-        <Alert severity="error" sx={{ mt: 1 }}>{formErrors.username.message}</Alert>
-      )}
-      <TextField
-        type="password"
-        placeholder="Contraseña"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      {formErrors.password && (
-        <Alert severity="error" sx={{ mt: 1 }}>{formErrors.password.message}</Alert>
-      )}
-      <Button onClick={handleRegister} variant="contained" sx={{ mt: 2 }}>Registrarse</Button>
-      {authErrors && Array.isArray(authErrors) && (
-        <div style={{ marginTop: '1rem' }}>
-          {authErrors.map((error, index) => (
-            <Alert key={index} severity="error" sx={{ mt: 1 }}>{error.message}</Alert>
-          ))}
-        </div>
-      )}
-      {registrationSuccess && (
-        <Alert severity="success" sx={{ mt: 2 }}>¡Registrado con éxito!</Alert>
-      )}
+    <div className="flex justify-center items-center">
+      <div className="w-full max-w-md bg-white border border-gray-300 shadow-xl rounded-xl p-6 mt-10">
+        <h2 className="text-center mb-4 font-bold text-3xl text-blue-500">Registro</h2>
+        <form onSubmit={handleRegister}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block mb-1 font-bold text-center text-blue-500">Correo Electrónico:</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="border border-gray-400 rounded-md p-2 w-full"
+            />
+            {formErrors.email && (
+              <p style={{ color: "red" }}>{formErrors.email}</p>
+            )}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="username" className="block mb-1 font-bold text-center text-blue-500">Nombre de Usuario:</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className="border border-gray-400 rounded-md p-2 w-full"
+            />
+            {formErrors.username && (
+              <p style={{ color: "red" }}>{formErrors.username}</p>
+            )}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block mb-1 font-bold text-center text-blue-500">Contraseña:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="border border-gray-400 rounded-md p-2 w-full"
+            />
+            {formErrors.password && (
+              <p style={{ color: "red" }}>{formErrors.password}</p>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+          >
+            Registrarse
+          </button>
+        </form>
+        {authErrors && authErrors.length > 0 && (
+          <div style={{ marginTop: "1rem" }}>
+            {authErrors.map((err: any, index: number) => (
+              <p key={index} style={{ color: "red", marginTop: "0.5rem" }}>
+                {err.message}
+              </p>
+            ))}
+          </div>
+        )}
+        {registrationSuccess && (
+          <p style={{ color: "green", marginTop: "1rem" }}>¡Registrado con éxito!</p>
+        )}
+      </div>
     </div>
   );
 };

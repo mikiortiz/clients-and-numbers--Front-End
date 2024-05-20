@@ -53,49 +53,65 @@ const LoginPage = () => {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div>
-      <h2>Iniciar Sesión</h2>{" "}
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="email">Correo Electrónico:</label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-
-          {formErrors.email && (
-            <p style={{ color: "red" }}>{formErrors.email}</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="password">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-
-          {formErrors.password && (
-            <p style={{ color: "red" }}>{formErrors.password}</p>
-          )}
-        </div>
-        <button type="submit">Iniciar Sesión</button>
-      </form>
-      {authErrors && authErrors.length > 0 && (
-        <div style={{ marginTop: "1rem" }}>
-          {authErrors.map((err: any, index: number) => (
-            <p key={index} style={{ color: "red", marginTop: "0.5rem" }}>
-              {err.message}
-            </p>
-          ))}
-        </div>
-      )}
+    <div className="flex justify-center items-center mt-20">
+      <div className="w-full max-w-md bg-white border border-gray-300 shadow-xl rounded-xl p-6">
+        <h2 className="text-center mb-4 font-bold text-3xl text-blue-500">
+          Iniciar Sesión
+        </h2>
+        <form onSubmit={handleLogin}>
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block mb-1 font-bold text-center text-blue-500"
+            >
+              Correo Electrónico:
+            </label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="border border-gray-400 rounded-md p-2 w-full"
+            />
+            {formErrors.email && (
+              <p style={{ color: "red" }}>{formErrors.email}</p>
+            )}
+            <label
+              htmlFor="password"
+              className="block mb-1 font-bold text-center text-blue-500"
+            >
+              Contraseña:
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="border border-gray-400 rounded-md p-2 w-full"
+            />
+            {formErrors.password && (
+              <p style={{ color: "red" }}>{formErrors.password}</p>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+          >
+            Iniciar Sesión
+          </button>
+        </form>
+        {authErrors && authErrors.length > 0 && (
+          <div style={{ marginTop: "1rem" }}>
+            {authErrors.map((err: any, index: number) => (
+              <p key={index} style={{ color: "red", marginTop: "0.5rem" }}>
+                {err.message}
+              </p>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
