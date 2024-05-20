@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background-color: #f5f5f5; /* Fondo de color oscuro */
+    min-height: 100vh;        /* Asegura que el cuerpo ocupe al menos la altura de la ventana */
+    margin: 0;                /* Elimina márgenes predeterminados */
+    display: flex;
+    flex-direction: column;
+}
