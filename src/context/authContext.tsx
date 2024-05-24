@@ -1,16 +1,6 @@
-import {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, useState, useContext, useEffect, ReactNode } from "react";
 import PropTypes from "prop-types";
-import {
-  registerRequest,
-  loginRequest,
-  verifyTokenRequest,
-} from "../services/auth";
+import { registerRequest, loginRequest, verifyTokenRequest } from "../services/auth";
 import { UserRegistrationData } from "../model/UserRegistrationData";
 
 interface AuthContextProps {
@@ -20,12 +10,11 @@ interface AuthContextProps {
   signIn: (credentials: UserRegistrationData) => Promise<void>;
   isAuthenticated: boolean;
   authErrors: { field: string; message: string }[];
+  setAuthErrors: React.Dispatch<React.SetStateAction<{ field: string; message: string }[]>>;
   logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContextProps | undefined>(
-  undefined
-);
+export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const useAuth = (): AuthContextProps => {
   const context = useContext(AuthContext);
@@ -42,9 +31,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserRegistrationData | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [authErrors, setAuthErrors] = useState<
-    { field: string; message: string }[]
-  >([]);
+  const [authErrors, setAuthErrors] = useState<{ field: string; message: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const signup = async (userData: UserRegistrationData): Promise<void> => {
@@ -54,9 +41,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const { data } = response;
         setUser(data);
         setIsAuthenticated(false);
+        return data;
       }
     } catch (error) {
       handleAuthError(error);
+      throw error;
     }
   };
 
@@ -71,7 +60,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUser(data);
           setIsAuthenticated(true);
         } else {
-          // Manejar el caso si no hay token en la respuesta
           console.error("El servidor no proporcionó un token de autorización.");
         }
       }
@@ -91,9 +79,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setAuthErrors(yupErrors);
       } else if (responseData.message) {
         if (responseData.message === "El correo electrónico ya está en uso") {
-          setAuthErrors([
-            { field: "email", message: "El correo electrónico ya está en uso" },
-          ]);
+          setAuthErrors([{ field: "email", message: "El correo electrónico ya está en uso" }]);
         } else {
           setAuthErrors([{ field: "network", message: responseData.message }]);
         }
@@ -107,7 +93,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = (): void => {
     localStorage.removeItem("token");
-    console.log(localStorage);
     setUser(null);
     setIsAuthenticated(false);
     setAuthErrors([]);
@@ -155,6 +140,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         signIn,
         isAuthenticated,
         authErrors,
+        setAuthErrors,
         logout,
       }}
     >

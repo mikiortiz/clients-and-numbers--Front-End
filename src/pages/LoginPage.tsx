@@ -1,111 +1,141 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { useAuth } from "../context/authContext";
+import {
+  ExclamationTriangleIcon,
+  EnvelopeIcon,
+  LockClosedIcon,
+} from "@heroicons/react/24/solid";
 import { UserRegistrationData } from "../model/UserRegistrationData";
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Correo electrónico inválido")
+    .required("Correo electrónico requerido"),
+  password: Yup.string().required("Contraseña requerida"),
+});
 
 const LoginPage = () => {
   const { signIn, authErrors, isAuthenticated } = useAuth();
-  const [formData, setFormData] = useState<UserRegistrationData>({
-    email: "",
-    password: "",
-  });
-  const [formErrors, setFormErrors] = useState<
-    Record<string, string | undefined>
-  >({});
   const navigate = useNavigate();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-    setFormErrors((prevErrors: any) => ({ ...prevErrors, [name]: "" }));
-  };
-
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      await signIn(formData);
-    } catch (error) {
-      handleAuthError(error);
-    }
-  };
-
-  const handleAuthError = (error: any) => {
-    if (error.response && error.response.data && error.response.data.errors) {
-      const serverErrors = error.response.data.errors;
-      const mappedErrors: any = {};
-      serverErrors.forEach((err: any) => {
-        mappedErrors[err.field] = `${
-          err.field.charAt(0).toUpperCase() + err.field.slice(1)
-        } ${err.message}`;
-      });
-      setFormErrors(mappedErrors);
-    } else {
-      console.log("Error al iniciar sesión:", error);
-    }
-  };
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
-      console.log("redirecciona?");
       navigate("/config");
     }
   }, [isAuthenticated, navigate]);
 
+  const handleLogin = async (
+    values: UserRegistrationData,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+  ) => {
+    try {
+      await signIn(values);
+    } catch (error) {
+      console.log("Error al iniciar sesión:", error);
+    }
+    setSubmitting(false);
+  };
+
   return (
-    <div className="flex justify-center items-center mt-20">
-      <div className="w-full max-w-md bg-white border border-gray-300 shadow-xl rounded-xl p-6">
-        <h2 className="text-center mb-4 font-bold text-3xl text-blue-500">
-          Iniciar Sesión
+    <div className="flex justify-center items-center">
+      <div className="w-full max-w-md bg-gray-100 border border-gray-300 shadow-xl rounded-xl p-4 mt-5">
+        <h2 className="text-center mb-2 font-semibold text-4xl text-gray-800">
+          INICIAR SESIÓN
         </h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block mb-1 font-bold text-center text-blue-500"
-            >
-              Correo Electrónico:
-            </label>
-            <input
-              type="text"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="border border-gray-400 rounded-md p-2 w-full"
-            />
-            {formErrors.email && (
-              <p style={{ color: "red" }}>{formErrors.email}</p>
-            )}
-            <label
-              htmlFor="password"
-              className="block mb-1 font-bold text-center text-blue-500"
-            >
-              Contraseña:
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="border border-gray-400 rounded-md p-2 w-full"
-            />
-            {formErrors.password && (
-              <p style={{ color: "red" }}>{formErrors.password}</p>
-            )}
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-          >
-            Iniciar Sesión
-          </button>
-        </form>
+        <h2 className="text-center font-semibold text-gray-400">
+          "Ingresa y gestiona tus usuarios y números de forma fácil"
+        </h2>
+        <div
+          className="border-t-2 border-purple-300 my-4"
+          style={{ width: "108%", marginLeft: -17 }}
+        ></div>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={validationSchema}
+          onSubmit={handleLogin}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="mb-2">
+                <label
+                  htmlFor="email"
+                  className="block mb-1 font-bold text-center text-gray-500"
+                >
+                  Correo Electrónico:
+                </label>
+                <div className="flex items-center border border-gray-400 rounded-md p-2">
+                  <EnvelopeIcon
+                    className={`h-6 w-6 text-purple-700 mr-2 ${
+                      focusedField === "email" ? "animate-bounce" : ""
+                    }`}
+                  />
+                  <Field
+                    type="text"
+                    id="email"
+                    name="email"
+                    className="border-none outline-none flex-grow focus:ring-0 bg-gray-100"
+                    onFocus={() => setFocusedField("email")}
+                    onBlur={() => setFocusedField(null)}
+                  />
+                </div>
+                <ErrorMessage name="email">
+                  {(msg) => (
+                    <p className="text-red-500 flex items-center">
+                      <ExclamationTriangleIcon className="h-6 w-6 text-red-500 mr-2 mt-1" />
+                      {msg}
+                    </p>
+                  )}
+                </ErrorMessage>
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="password"
+                  className="block mb-1 font-bold text-center text-gray-500"
+                >
+                  Contraseña:
+                </label>
+                <div className="flex items-center border border-gray-400 rounded-md p-2">
+                  <LockClosedIcon
+                    className={`h-6 w-6 text-purple-700 mr-2 ${
+                      focusedField === "password" ? "animate-bounce" : ""
+                    }`}
+                  />
+                  <Field
+                    type="password"
+                    id="password"
+                    name="password"
+                    className="border-none outline-none flex-grow focus:ring-0 bg-gray-100"
+                    onFocus={() => setFocusedField("password")}
+                    onBlur={() => setFocusedField(null)}
+                  />
+                </div>
+                <ErrorMessage name="password">
+                  {(msg) => (
+                    <p className="text-red-500 flex items-center">
+                      <ExclamationTriangleIcon className="h-6 w-6 text-red-500 mr-2 mt-1" />
+                      {msg}
+                    </p>
+                  )}
+                </ErrorMessage>
+              </div>
+              <button
+                type="submit"
+                className="bg-purple-500 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-xl w-full"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Iniciando Sesión..." : "Iniciar Sesión"}
+              </button>
+            </Form>
+          )}
+        </Formik>
         {authErrors && authErrors.length > 0 && (
-          <div style={{ marginTop: "1rem" }}>
-            {authErrors.map((err: any, index: number) => (
-              <p key={index} style={{ color: "red", marginTop: "0.5rem" }}>
+          <div className="mt-4 p-4 bg-red-500 text-white text-center rounded-md">
+            {authErrors.map((err, index) => (
+              <p key={index} style={{ color: "white", marginTop: "0.5rem" }}>
                 {err.message}
               </p>
             ))}
