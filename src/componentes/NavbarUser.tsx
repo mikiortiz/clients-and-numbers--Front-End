@@ -1,5 +1,5 @@
 import { useAuth } from "../context/authContext";
-import { AppBar, Toolbar, Button, Typography, IconButton, Menu, MenuItem } from "@mui/material";
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import easyCounterLogo from "../../public/images/easy-counter-logo.png";
 import MenuIcon from '@mui/icons-material/Menu';
@@ -37,49 +37,44 @@ const Navbar = () => {
     if (!isAuthenticated) {
       return (
         <>
-          <Button
-            color="inherit"
-            onClick={() => navigate("/login")}
+          <MenuItem
+            onClick={() => { navigate("/login"); handleMenuClose(); }}
             style={buttonStyles("/login")}
           >
             Iniciar sesión
-          </Button>
-          <Button
-            color="inherit"
-            onClick={() => navigate("/register")}
+          </MenuItem>
+          <MenuItem
+            onClick={() => { navigate("/register"); handleMenuClose(); }}
             style={buttonStyles("/register")}
           >
             Registrarse
-          </Button>
+          </MenuItem>
         </>
       );
     } else {
       return (
         <>
-          <Button
-            color="inherit"
+          <MenuItem
             onClick={() => { navigate("/users"); handleMenuClose(); }}
             style={buttonStyles("/users")}
           >
             Mis clientes
-          </Button>
-          <Button
-            color="inherit"
+          </MenuItem>
+          <MenuItem
             onClick={() => { navigate("/config"); handleMenuClose(); }}
             style={buttonStyles("/config")}
           >
             Configurar tabla
-          </Button>
-          <Button
-            color="inherit"
+          </MenuItem>
+          <MenuItem
             onClick={() => { navigate("/numbers"); handleMenuClose(); }}
             style={buttonStyles("/numbers")}
           >
             Mi tabla
-          </Button>
-          <Button color="inherit" onClick={() => { handleLogout(); handleMenuClose(); }}>
+          </MenuItem>
+          <MenuItem onClick={() => { handleLogout(); handleMenuClose(); }}>
             Salir de sesión
-          </Button>
+          </MenuItem>
         </>
       );
     }
@@ -132,14 +127,11 @@ const Navbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                <MenuItem onClick={() => { navigate("/users"); handleMenuClose(); }}>Mis clientes</MenuItem>
-                <MenuItem onClick={() => { navigate("/config"); handleMenuClose(); }}>Configurar tabla</MenuItem>
-                <MenuItem onClick={() => { navigate("/numbers"); handleMenuClose(); }}>Mi tabla</MenuItem>
-                <MenuItem onClick={() => { handleLogout(); handleMenuClose(); }}>Salir de sesión</MenuItem>
+                {renderAuthButtons()}
               </Menu>
             </>
           ) : (
-            // aqui se puede configurarlos botones para pantallas grandes
+            // Botones para pantallas grandes
             renderAuthButtons()
           )}
         </div>
