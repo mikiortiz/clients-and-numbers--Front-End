@@ -1,140 +1,151 @@
-import React, { useEffect, useState } from "react";
-import { Chip, LinearProgress } from "@mui/material";
-import AddUserDialog from "../componentes/AddUserDialog";
-import NumberInfoDialog from "../componentes/NumberInfoDialog";
-import MyApi from "../services/MyApi";
+import { useAuth } from "../context/authContext";
+import { AppBar, Toolbar, Button, Typography, IconButton, Menu, MenuItem } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
 import easyCounterLogo from "../../public/images/easy-counter-logo.png";
+import MenuIcon from '@mui/icons-material/Menu';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import React from "react";
 
-const NumberTable: React.FC = () => {
-  const [numbers, setNumbers] = useState<number[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Añade el tipo boolean para loading
-  const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
-  const [dialogType, setDialogType] = useState<"addUser" | "numberInfo" | null>(
-    null
-  );
-  const [assignedNumbers, setAssignedNumbers] = useState<string[]>([]);
+const Navbar = () => {
+  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null); // Define el tipo de anchorEl
+  const isMobile = useMediaQuery('(max-width:600px)');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await MyApi.getNumbersInRange(0, 0);
-        setNumbers(response);
-
-        const assignedNumbers = await getAssignedNumbers();
-        setAssignedNumbers(assignedNumbers);
-      } catch (error) {
-        console.error("Error al obtener los números:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const getAssignedNumbers = async () => {
-    try {
-      const users = await MyApi.getUsers();
-      const assignedNumbers = users.flatMap((user) => user.numbers);
-      return assignedNumbers;
-    } catch (error) {
-      console.error("Error al obtener los números asignados:", error);
-      return [];
-    }
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => { // Define el tipo de event
+    setAnchorEl(event.currentTarget);
   };
 
-  const handleChipClick = (number: number) => {
-    setSelectedNumber(number);
-    const isNumberAssigned = assignedNumbers.includes(number.toString());
-    if (isNumberAssigned) {
-      setDialogType("numberInfo");
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const renderAuthButtons = () => {
+    const currentPath = location.pathname;
+
+    const buttonStyles = (path: string) => ({ // Define el tipo de path
+      backgroundColor: currentPath === path ? "#9575cd" : "inherit",
+      color: currentPath === path ? "#ffffff" : "inherit",
+    });
+
+    if (!isAuthenticated) {
+      return (
+        <>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/login")}
+            style={buttonStyles("/login")}
+          >
+            Iniciar sesión
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/register")}
+            style={buttonStyles("/register")}
+          >
+            Registrarse
+          </Button>
+        </>
+      );
     } else {
-      setDialogType("addUser");
+      return (
+        <>
+          <Button
+            color="inherit"
+            onClick={() => { navigate("/users"); handleMenuClose(); }}
+            style={buttonStyles("/users")}
+          >
+            Mis clientes
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => { navigate("/config"); handleMenuClose(); }}
+            style={buttonStyles("/config")}
+          >
+            Configurar tabla
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => { navigate("/numbers"); handleMenuClose(); }}
+            style={buttonStyles("/numbers")}
+          >
+            Mi tabla
+          </Button>
+          <Button color="inherit" onClick={() => { handleLogout(); handleMenuClose(); }}>
+            Salir de sesión
+          </Button>
+        </>
+      );
     }
-  };
-
-  const isNumberAssigned = (number: number) => {
-    return assignedNumbers.includes(number.toString());
-  };
-
-  const updateAssignedNumbers = async () => {
-    const updatedAssignedNumbers = await getAssignedNumbers();
-    setAssignedNumbers(updatedAssignedNumbers);
   };
 
   return (
-    <div className="text-center p-8">
-      <h2 className="text-center mb-2 font-semibold text-4xl text-gray-800">
-        Números en la Tabla
-      </h2>
-      <p className="text-gray-600 mb-4">
-        ¡Excelente! tabla generada, selecciona números y gestiona usuarios de
-        manera eficiente.
-      </p>
-      {loading ? (
-        <div className="flex justify-center items-center flex-col space-y-4">
+    <AppBar
+      position="static"
+      style={{ backgroundColor: "#6b46c1", padding: "0 1rem" }}
+    >
+      <Toolbar className="flex justify-between items-center">
+        <div className="flex items-center" onClick={() => navigate("/")}>
           <img
             src={easyCounterLogo}
             alt="Easy Counter Logo"
-            className="w-32 h-auto animate-spin"
+            className="w-10 h-auto mr-2 animate-bounce"
           />
-          <LinearProgress
-            color="secondary"
-            style={{ width: "50%", borderRadius: "5px" }}
-          />
+          <Typography
+            variant="h6"
+            component="div"
+            style={{
+              cursor: "pointer",
+              textDecoration: location.pathname === "/" ? "underline" : "none",
+            }}
+          >
+            EasyCOUNTER
+          </Typography>
         </div>
-      ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          {numbers.map((number, index) => (
-            <Chip
-              key={index}
-              label={number.toString()}
-              style={{
-                margin: "5px",
-                width: 70,
-                cursor: "pointer",
-                backgroundColor: isNumberAssigned(number)
-                  ? "#9c27b0"
-                  : undefined,
-                color: isNumberAssigned(number) ? "white" : undefined,
-              }}
-              onClick={() => handleChipClick(number)}
-            />
-          ))}
+        <div className="flex space-x-4 items-center">
+          {isMobile ? (
+            // Menú de hamburguesa para pantallas pequeñas
+            <>
+              <IconButton
+                size="large"
+                edge="end"
+                color="inherit"
+                aria-label="menu"
+                onClick={handleMenuOpen}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={() => { navigate("/users"); handleMenuClose(); }}>Mis clientes</MenuItem>
+                <MenuItem onClick={() => { navigate("/config"); handleMenuClose(); }}>Configurar tabla</MenuItem>
+                <MenuItem onClick={() => { navigate("/numbers"); handleMenuClose(); }}>Mi tabla</MenuItem>
+                <MenuItem onClick={() => { handleLogout(); handleMenuClose(); }}>Salir de sesión</MenuItem>
+              </Menu>
+            </>
+          ) : (
+            // aqui se puede configurarlos botones para pantallas grandes
+            renderAuthButtons()
+          )}
         </div>
-      )}
-
-      {/* Renderizado del diálogo correspondiente */}
-      {dialogType === "numberInfo" && (
-        <NumberInfoDialog
-          open={true}
-          onClose={() => {
-            setDialogType(null);
-            setSelectedNumber(null);
-            updateAssignedNumbers();
-          }}
-          selectedNumber={selectedNumber}
-        />
-      )}
-      {dialogType === "addUser" && (
-        <AddUserDialog
-          open={true}
-          onClose={() => {
-            setDialogType(null);
-            setSelectedNumber(null);
-            updateAssignedNumbers();
-          }}
-          selectedNumber={selectedNumber}
-        />
-      )}
-    </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 
-export default NumberTable;
+export default Navbar;
