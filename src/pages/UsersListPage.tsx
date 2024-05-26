@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Typography, Grid } from "@mui/material";
 import MyApi from "../services/MyApi";
 import User from "../model/UserType";
 
@@ -20,25 +19,43 @@ const UsersList: React.FC = () => {
   }, []);
 
   return (
-    <Grid container spacing={3}>
-      {users.map((user) => (
-        <Grid item key={user._id} xs={12} sm={6} md={4}>
-          <Card>
-            <CardContent>
-              <Typography variant="h5" component="div">
+    <div className="shadow-lg rounded-lg p-4 w-full overflow-y-full text-center">
+      <h2 className="text-4xl font-semibold mb-6">Lista de Usuarios</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {users.map((user) => (
+          <div key={user._id}>
+            <div className="bg-white border border-purple-500 rounded-lg p-4">
+              <h3 className="text-lg font-semibold mb-4">
                 {user.firstName} {user.lastName}
-              </Typography>
-              <Typography color="textSecondary" gutterBottom>
-                usuario: {user.username}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Números asociados: {user.numbers.join(", ")}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
+              </h3>
+              <div className="flex items-center justify-center gap-2">
+                <p className="text-sm text-gray-500 font-semibold">
+                  Nombre de Usuario:
+                </p>
+                {user.username}
+              </div>
+              <div
+                className="border-t-2 border-purple-300 my-4"
+                style={{ width: "100%" }}
+              ></div>
+              <p className="text-sm text-gray-500 font-semibold">
+                Números asociados:
+                <div className="flex flex-wrap gap-2">
+                  {user.numbers.map((number) => (
+                    <div
+                      key={number}
+                      className="bg-purple-500 text-white text-sm rounded-full px-3 py-1 text-center"
+                    >
+                      {number}
+                    </div>
+                  ))}
+                </div>
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

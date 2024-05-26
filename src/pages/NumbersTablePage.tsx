@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Chip, CircularProgress, Typography } from "@mui/material";
+import { Chip, LinearProgress } from "@mui/material";
 import AddUserDialog from "../componentes/AddUserDialog";
 import NumberInfoDialog from "../componentes/NumberInfoDialog";
 import MyApi from "../services/MyApi";
+import easyCounterLogo from "../../public/images/easy-counter-logo.png";
 
 const NumberTable: React.FC = () => {
   const [numbers, setNumbers] = useState<number[]>([]);
@@ -62,36 +63,18 @@ const NumberTable: React.FC = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "30px" }}>
-      <Typography
-        variant="h3"
-        style={{
-          color: "#2196f3",
-          marginBottom: "20px",
-          fontFamily: "fantasy",
-        }}
-      >
-        Números Generados en la Tabla
-      </Typography>
+    <div className="text-center p-8">
+      <h2 className="text-center mb-2 font-semibold text-4xl text-gray-800">
+        Números en la Tabla
+      </h2>
+      <p className="text-gray-600 mb-4">
+        ¡Excelente! tabla generada, selecciona números y gestiona usuarios de
+        manera eficiente.
+      </p>
       {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "200px",
-          }}
-        >
-          <CircularProgress
-            color="primary"
-            size={100}
-            thickness={10}
-            sx={{
-              color: "#2196f3",
-              background: "lightgrey",
-              borderRadius: "100%",
-            }}
-          />
+        <div className="flex justify-center items-center flex-col space-y-4">
+          <img src={easyCounterLogo} alt="Easy Counter Logo" className="w-32 h-auto animate-spin" />
+          <LinearProgress color="secondary" style={{ width: '50%', borderRadius: '5px' }} />
         </div>
       ) : (
         <div
@@ -110,7 +93,7 @@ const NumberTable: React.FC = () => {
                 width: 70,
                 cursor: "pointer",
                 backgroundColor: isNumberAssigned(number)
-                  ? "#f50057"
+                  ? "#9c27b0"
                   : undefined,
                 color: isNumberAssigned(number) ? "white" : undefined,
               }}
@@ -119,8 +102,6 @@ const NumberTable: React.FC = () => {
           ))}
         </div>
       )}
-
-      {/* Renderizado del diálogo correspondiente */}
       {dialogType === "numberInfo" && (
         <NumberInfoDialog
           open={true}
