@@ -4,6 +4,7 @@ import AddUserDialog from "../componentes/AddUserDialog";
 import NumberInfoDialog from "../componentes/NumberInfoDialog";
 import MyApi from "../services/MyApi";
 import easyCounterLogo from "../../public/images/easy-counter-logo.png";
+import { InfoOutlined } from "@mui/icons-material";
 
 const NumberTable: React.FC = () => {
   const [numbers, setNumbers] = useState<number[]>([]);
@@ -73,33 +74,68 @@ const NumberTable: React.FC = () => {
       </p>
       {loading ? (
         <div className="flex justify-center items-center flex-col space-y-4">
-          <img src={easyCounterLogo} alt="Easy Counter Logo" className="w-32 h-auto animate-spin" />
-          <LinearProgress color="secondary" style={{ width: '50%', borderRadius: '5px' }} />
+          <img
+            src={easyCounterLogo}
+            alt="Easy Counter Logo"
+            className="w-32 h-auto animate-spin"
+          />
+          <LinearProgress
+            color="secondary"
+            style={{ width: "50%", borderRadius: "5px" }}
+          />
         </div>
       ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          {numbers.map((number, index) => (
-            <Chip
-              key={index}
-              label={number.toString()}
-              style={{
-                margin: "5px",
-                width: 70,
-                cursor: "pointer",
-                backgroundColor: isNumberAssigned(number)
-                  ? "#9c27b0"
-                  : undefined,
-                color: isNumberAssigned(number) ? "white" : undefined,
-              }}
-              onClick={() => handleChipClick(number)}
-            />
-          ))}
+        <div className="flex justify-center flex-wrap gap-4">
+          {numbers.map((number, index) => {
+            const isAssigned = isNumberAssigned(number);
+            return (
+              <div
+                key={index}
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  transition: "transform 0.3s ease-in-out",
+                }}
+                onMouseEnter={
+                  isAssigned
+                    ? (e) => (e.currentTarget.style.transform = "scale(1.1)")
+                    : undefined
+                }
+                onMouseLeave={
+                  isAssigned
+                    ? (e) => (e.currentTarget.style.transform = "scale(1)")
+                    : undefined
+                }
+              >
+                <Chip
+                  label={number.toString()}
+                  style={{
+                    cursor: "pointer",
+                    width: "90px",
+                    height: "60px",
+                    margin: "4px", // Reducir margen entre chips
+                    padding: "6px", // Reducir padding interno del chip
+                    backgroundColor: isAssigned ? "#9c27b0" : undefined,
+                    color: isAssigned ? "white" : undefined,
+                    fontSize: "20px",
+                    position: "relative",
+                  }}
+                  onClick={() => handleChipClick(number)}
+                />
+                {isAssigned && (
+                  <InfoOutlined
+                    style={{
+                      position: "absolute",
+                      top: 5,
+                      right: 10,
+                      color: "white",
+                      fontSize: "20px",
+                    }}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
       {dialogType === "numberInfo" && (
