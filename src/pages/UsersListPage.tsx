@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Chip } from "@mui/material";
 import MyApi from "../services/MyApi";
 import User from "../model/UserType";
 
@@ -40,14 +41,20 @@ const UsersList: React.FC = () => {
               ></div>
               <p className="text-sm text-gray-500 font-semibold">
                 Números asociados:
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mt-2">
                   {user.numbers.map((number) => (
-                    <div
+                    <Chip
                       key={number}
-                      className="bg-purple-500 text-white text-sm rounded-full px-3 py-1 text-center"
-                    >
-                      {number}
-                    </div>
+                      label={number.toString()}
+                      style={{
+                        cursor: "pointer",
+                        width: "70px",
+                        height: "40px",
+                        backgroundColor: "#9c27b0",
+                        color: "white",
+                        fontSize: "20px",
+                      }}
+                    />
                   ))}
                 </div>
               </p>
