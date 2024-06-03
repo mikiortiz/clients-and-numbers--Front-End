@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
 const TableConfiguration = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [isTableGenerated, setIsTableGenerated] = useState(false);
-  const [redirectTimer, setRedirectTimer] = useState(20); // Establecemos el temporizador inicial en 15 segundos
+  const [redirectTimer, setRedirectTimer] = useState(20);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -118,7 +118,7 @@ const TableConfiguration = () => {
         </h2>
         {isTableGenerated && (
           <div className="mt-2 bg-yellow-300 p-2 rounded-md text-center">
-            <ExclamationTriangleIcon className="h-6 w-6 inline-block mb-1" />
+            <ExclamationTriangleIcon className="h-12 w-12 inline-block mb-1 animate-pulse" />
             <span className="inline-block">
               Ya tienes una tabla generada. Por seguridad, tienes{" "}
               <span id="timer">{redirectTimer}</span> segundos

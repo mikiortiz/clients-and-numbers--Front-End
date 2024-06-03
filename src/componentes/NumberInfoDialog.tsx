@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MyApi from "../services/MyApi";
 import User from "../model/UserType";
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
+import easyCounterLogo from "../../public/images/easy-counter-logo.png";
+import { InformationCircleIcon, UserIcon } from "@heroicons/react/24/solid";
+import { LinearProgress } from "@mui/material";
 
 interface NumberInfoDialogProps {
   open: boolean;
@@ -15,6 +17,7 @@ const NumberInfoDialog: React.FC<NumberInfoDialogProps> = ({
   selectedNumber,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserByNumber = async () => {
@@ -28,6 +31,8 @@ const NumberInfoDialog: React.FC<NumberInfoDialogProps> = ({
         }
       } catch (error) {
         console.error("Error al obtener el usuario por número:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -54,29 +59,64 @@ const NumberInfoDialog: React.FC<NumberInfoDialogProps> = ({
         style={{ overflowY: "auto" }}
       >
         <div className="flex justify-center items-center mb-4">
-          <InformationCircleIcon className="h-6 w-6 mr-2 text-purple-500" />
+          <InformationCircleIcon className="h-6 w-6 mr-2 text-purple-700 animate-pulse" />
           <h2 className="text-xl font-semibold">Información del Número</h2>
         </div>
         <div className="text-center">
-          {user ? (
-            <>
-              <p className="text-gray-700">
-                <strong>Número:</strong> {selectedNumber}
-              </p>
-              <p className="text-gray-700">
-                <strong>Nombre:</strong> {user.firstName}
-              </p>
-              <p className="text-gray-700">
-                <strong>Apellido:</strong> {user.lastName}
-              </p>
-              <p className="text-gray-700">
-                <strong>Nombre de Usuario:</strong> {user.username}
-              </p>
-            </>
+          {loading ? (
+            <div className="mb-4">
+              <img
+                src={easyCounterLogo}
+                alt="Easy Counter Logo"
+                className="w-20 h-auto animate-spin mb-4 ml-12"
+              />
+              <LinearProgress color="secondary" />
+              <p className="text-gray-700">Esperando usuario...</p>
+            </div>
           ) : (
-            <p className="text-gray-700">
-              Número no asignado a ningún usuario.
-            </p>
+            <>
+              <div className="mb-4">
+                <span
+                  className="text-white rounded-md px-3 py-1 bg-purple-700"
+                  style={{
+                    fontSize: "20px",
+                    width: "90px",
+                    height: "60px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "10px",
+                  }}
+                >
+                  {selectedNumber}
+                </span>
+              </div>
+              <div className="mb-4">
+                <div className="flex items-center mb-2">
+                  <UserIcon className="h-6 w-6 mr-2 text-purple-700 animate-pulse" />
+                  <h3 className="text-lg font-semibold">
+                    Información del Usuario:
+                  </h3>
+                </div>
+                {user ? (
+                  <>
+                    <p className="text-gray-700">
+                      <strong>Nombre:</strong> {user.firstName}
+                    </p>
+                    <p className="text-gray-700">
+                      <strong>Apellido:</strong> {user.lastName}
+                    </p>
+                    <p className="text-gray-700">
+                      <strong>Nombre de Usuario:</strong> {user.username}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-gray-700">
+                    No se encontró información del usuario.
+                  </p>
+                )}
+              </div>
+            </>
           )}
         </div>
         <div className="flex justify-center mt-4">

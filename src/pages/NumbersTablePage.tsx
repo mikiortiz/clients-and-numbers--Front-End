@@ -4,7 +4,7 @@ import AddUserDialog from "../componentes/AddUserDialog";
 import NumberInfoDialog from "../componentes/NumberInfoDialog";
 import MyApi from "../services/MyApi";
 import easyCounterLogo from "../../public/images/easy-counter-logo.png";
-import { InfoOutlined } from "@mui/icons-material";
+import { CheckIcon } from "@heroicons/react/24/solid"; // Importar el icono de check
 
 const NumberTable: React.FC = () => {
   const [numbers, setNumbers] = useState<number[]>([]);
@@ -107,58 +107,67 @@ const NumberTable: React.FC = () => {
                     : undefined
                 }
               >
-                <Chip
-                  label={number.toString()}
-                  style={{
-                    cursor: "pointer",
-                    width: "90px",
-                    height: "60px",
-                    margin: "4px", // Reducir margen entre chips
-                    padding: "6px", // Reducir padding interno del chip
-                    backgroundColor: isAssigned ? "#9c27b0" : undefined,
-                    color: isAssigned ? "white" : undefined,
-                    fontSize: "20px",
-                    position: "relative",
-                  }}
-                  onClick={() => handleChipClick(number)}
-                />
-                {isAssigned && (
-                  <InfoOutlined
+                <div className="relative">
+                  <Chip
+                    label={number.toString()}
                     style={{
-                      position: "absolute",
-                      top: 5,
-                      right: 10,
-                      color: "white",
-                      fontSize: "20px",
+                      cursor: "pointer",
+                      width: "90px",
+                      height: "60px",
+                      margin: "4px",
+                      padding: "6px",
+                      backgroundColor: isAssigned ? "#9c27b0" : undefined,
+                      color: isAssigned ? "white" : undefined,
+                      fontSize: "25px",
                     }}
+                    onClick={() => handleChipClick(number)}
                   />
-                )}
+                  {isAssigned && (
+                    <div
+                      className="absolute top-3 right-3 flex justify-center items-center bg-green-500 rounded-full"
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        transform: "translate(50%, -50%)",
+                      }}
+                    >
+                      <CheckIcon
+                        className="text-white h-10 w-10 stroke-current stroke-2"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}
         </div>
       )}
-      {dialogType === "numberInfo" && (
-        <NumberInfoDialog
-          open={true}
-          onClose={() => {
-            setDialogType(null);
-            setSelectedNumber(null);
-            updateAssignedNumbers();
-          }}
-          selectedNumber={selectedNumber}
-        />
-      )}
-      {dialogType === "addUser" && (
-        <AddUserDialog
-          open={true}
-          onClose={() => {
-            setDialogType(null);
-            setSelectedNumber(null);
-            updateAssignedNumbers();
-          }}
-          selectedNumber={selectedNumber}
-        />
+      {dialogType && (
+        <>
+          {dialogType === "numberInfo" && (
+            <NumberInfoDialog
+              open={true}
+              onClose={() => {
+                setDialogType(null);
+                setSelectedNumber(null);
+                updateAssignedNumbers();
+              }}
+              selectedNumber={selectedNumber}
+            />
+          )}
+          {dialogType === "addUser" && (
+            <AddUserDialog
+              open={true}
+              onClose={() => {
+                setDialogType(null);
+                setSelectedNumber(null);
+                updateAssignedNumbers();
+              }}
+              selectedNumber={selectedNumber}
+            />
+          )}
+        </>
       )}
     </div>
   );
