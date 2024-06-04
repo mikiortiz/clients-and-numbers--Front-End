@@ -3,6 +3,7 @@ import {
   MagnifyingGlassCircleIcon,
   XCircleIcon,
   CheckCircleIcon,
+  ExclamationTriangleIcon,
 } from "@heroicons/react/24/solid";
 import MyApi from "../services/MyApi";
 import User from "../model/UserType";
@@ -211,7 +212,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
                     <label htmlFor="existing-username" className="block">
                       {selectedUser
                         ? "Usuario seleccionado"
-                        : "Selecciona un usuario para asignarlo"}
+                        : "No hay Usuario Seleccionado"}
                     </label>
                     <span className="ml-2">
                       {selectedUser ? (
@@ -226,7 +227,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
                   <input
                     type="text"
                     id="existing-username"
-                    placeholder="Buscador de usuarios existente"
+                    placeholder="Busqueda por Nombre de Usuario"
                     value={username}
                     onChange={(e) => {
                       setUsername(e.target.value);
@@ -243,7 +244,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
                     }`}
                   />
                 </div>
-                <p className="text-gray-700">Selección Obligatoria</p>
+                <p className="text-xl font-semibold">Elección Obligatoria</p>
 
                 <ul className="max-h-40 overflow-y-auto border border-gray-300 rounded p-2">
                   {searchResults.map((user) => (
@@ -265,13 +266,15 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
                   <div className="mb-2 text-red-500">
                     <p>{error}</p>
                     <button
-                      className="px-4 bg-purple-300 text-gray-700 rounded-xl font-semibold w-full"
+                      className="px-4 bg-yellow-300 text-gray-700 rounded-xl font-semibold w-full"
                       onClick={() => setShowExistingUserForm(true)}
                     >
-                      ¿Usuario existente?
+                      <ExclamationTriangleIcon className="h-8 w-8 inline-block animate-pulse mr-5" />
+                      Ver Usuario Existente
                     </button>
                   </div>
                 )}
+
                 <label htmlFor="first-name" className="block mb-1">
                   Nombre:
                 </label>
