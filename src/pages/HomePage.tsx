@@ -186,7 +186,7 @@ function HomePage() {
           </div>
           <div className="flex flex-col items-center mb-4 mr-10">
             <a
-              href="https://wa.me/?text=Hola,%20soy%20Miguel%20Ortiz%20Junior%20FullStack%20Developer%20web.%20Envíame%20un%20mensaje%20para%20contactarme."
+              href="https://wa.me/5492622517454?text=Hola,%20soy%20Miguel%20Ortiz%20Junior%20FullStack%20Developer%20web.%20Envíame%20un%20mensaje%20para%20contactarme."
               target="_blank"
               rel="noopener noreferrer"
             >
