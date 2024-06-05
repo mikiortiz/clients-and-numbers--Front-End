@@ -39,7 +39,7 @@ const UsersList: React.FC = () => {
                 className="border-t-2 border-purple-300 my-4"
                 style={{ width: "100%" }}
               ></div>
-              <p className="text-sm text-gray-500 font-semibold">
+              <div className="text-sm text-gray-500 font-semibold">
                 Números asociados:
                 <div className="flex flex-wrap gap-2 mt-2">
                   {user.numbers.map((number) => (
@@ -57,7 +57,7 @@ const UsersList: React.FC = () => {
                     />
                   ))}
                 </div>
-              </p>
+              </div>
             </div>
           </div>
         ))}

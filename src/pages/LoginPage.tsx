@@ -21,12 +21,23 @@ const LoginPage = () => {
   const { signIn, authErrors, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [showErrors, setShowErrors] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/config");
     }
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (authErrors && authErrors.length > 0) {
+      setShowErrors(true);
+      const timer = setTimeout(() => {
+        setShowErrors(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [authErrors]);
 
   const handleLogin = async (
     values: UserRegistrationData,
@@ -122,6 +133,15 @@ const LoginPage = () => {
                   )}
                 </ErrorMessage>
               </div>
+              {showErrors && authErrors && authErrors.length > 0 && (
+                <div className="mb-2 mt-2 p-2 bg-red-500 text-white text-center rounded-xl">
+                  {authErrors.map((err, index) => (
+                    <p key={index} style={{ color: "white" }}>
+                      {err.message}
+                    </p>
+                  ))}
+                </div>
+              )}
               <button
                 type="submit"
                 className="bg-purple-500 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-xl w-full"
@@ -132,15 +152,6 @@ const LoginPage = () => {
             </Form>
           )}
         </Formik>
-        {authErrors && authErrors.length > 0 && (
-          <div className="mt-4 p-4 bg-red-500 text-white text-center rounded-md">
-            {authErrors.map((err, index) => (
-              <p key={index} style={{ color: "white", marginTop: "0.5rem" }}>
-                {err.message}
-              </p>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -29,6 +29,7 @@ const TableConfiguration = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [isTableGenerated, setIsTableGenerated] = useState(false);
   const [redirectTimer, setRedirectTimer] = useState(20);
+  const timerRef = useRef<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,14 +38,18 @@ const TableConfiguration = () => {
         const numbersInRange = await MyApi.getNumbersInRange(0, 0);
         if (numbersInRange.length > 0) {
           setIsTableGenerated(true);
-          let timer = 20;
-          const interval = setInterval(() => {
-            setRedirectTimer(timer);
-            timer -= 1;
-            if (timer === -1) {
-              clearInterval(interval);
-              navigate("/numbers");
-            }
+          setRedirectTimer(20); // Reset the timer
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+          }
+          timerRef.current = window.setInterval(() => {
+            setRedirectTimer((prevTimer) => {
+              if (prevTimer === 1) {
+                clearInterval(timerRef.current as number);
+                navigate("/numbers");
+              }
+              return prevTimer - 1;
+            });
           }, 1000);
         }
       } catch (error) {
@@ -56,6 +61,12 @@ const TableConfiguration = () => {
     };
 
     checkTable();
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
   }, [navigate]);
 
   const handleGenerateTable = async (
@@ -185,7 +196,7 @@ const TableConfiguration = () => {
               </div>
               <button
                 type="submit"
-                className="w-full px-4 py-2 mt-2 font-bold text-white bg-purple-500 rounded-xl hover:bg-purple-700"
+                className="w-full px-4 py-4 mt-2 font-bold text-white bg-purple-500 rounded-xl hover:bg-purple-700"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Generando Tabla..." : "Generar Tabla"}

@@ -4,8 +4,7 @@ import AddUserDialog from "../componentes/AddUserDialog";
 import NumberInfoDialog from "../componentes/NumberInfoDialog";
 import MyApi from "../services/MyApi";
 import easyCounterLogo from "../../public/images/easy-counter-logo.png";
-import { CheckIcon } from "@heroicons/react/24/solid"; // Importar el icono de check
-
+import { CheckIcon } from "@heroicons/react/24/solid";
 const NumberTable: React.FC = () => {
   const [numbers, setNumbers] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
