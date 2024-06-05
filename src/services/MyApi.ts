@@ -10,12 +10,9 @@ const MyApi = {
       };
       console.log("peticion en la carga de numeros:", jwtToken);
       const numberRange = { start, end };
-      console.log("carga de numeros:", start, end,);
       const response = await axios.post("/numbers", numberRange, {
         headers: headers,
       });
-
-      console.log("Rango de números guardado exitosamente:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error al guardar el rango de números:", error);
@@ -34,8 +31,6 @@ const MyApi = {
         `/numbers?start=${start}&end=${end}`,
         { headers: headers }
       );
-
-      console.log("Números recuperados:", response.data);
       return response.data;
     } catch (error) {
       console.error(
@@ -52,10 +47,7 @@ const MyApi = {
       const headers = {
         Authorization: `Bearer ${jwtToken}`,
       };
-
       const response = await axios.get<User[]>("/users", { headers: headers });
-
-      console.log("Lista de usuarios:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error al obtener la lista de usuarios:", error);
@@ -73,8 +65,6 @@ const MyApi = {
       const response = await axios.post<User>("/scheduleUser", newUser, {
         headers: headers,
       });
-
-      console.log("Usuario agregado exitosamente:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error al agregar usuario:", error);
@@ -98,9 +88,6 @@ const MyApi = {
         headers: headers,
       });
 
-      console.log(
-        `Número ${number} agregado al usuario ${username} exitosamente.`
-      );
       return response.data;
     } catch (error) {
       console.error(

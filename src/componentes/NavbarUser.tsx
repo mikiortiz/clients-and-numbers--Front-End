@@ -29,60 +29,62 @@ const Navbar = () => {
   const renderAuthButtons = () => {
     const currentPath = location.pathname;
 
-    const buttonStyles = (path: string) => ({ // Define el tipo de path
+    const buttonStyles = (path: string) => ({ 
       backgroundColor: currentPath === path ? "#9575cd" : "inherit",
       color: currentPath === path ? "#ffffff" : "inherit",
+      borderRadius: "8px", 
     });
 
     if (!isAuthenticated) {
-      return (
-        <>
-          <MenuItem
-            onClick={() => { navigate("/login"); handleMenuClose(); }}
-            style={buttonStyles("/login")}
-          >
-            Iniciar sesión
-          </MenuItem>
-          <MenuItem
-            onClick={() => { navigate("/register"); handleMenuClose(); }}
-            style={buttonStyles("/register")}
-          >
-            Registrarse
-          </MenuItem>
-        </>
-      );
+      return [
+        <MenuItem
+          key="login"
+          onClick={() => { navigate("/login"); handleMenuClose(); }}
+          style={buttonStyles("/login")}
+        >
+          Iniciar sesión
+        </MenuItem>,
+        <MenuItem
+          key="register"
+          onClick={() => { navigate("/register"); handleMenuClose(); }}
+          style={buttonStyles("/register")}
+        >
+          Registrarse
+        </MenuItem>
+      ];
     } else {
-      return (
-        <>
-          <MenuItem
-            onClick={() => { navigate("/users"); handleMenuClose(); }}
-            style={buttonStyles("/users")}
-          >
-            Mis clientes
-          </MenuItem>
-          <MenuItem
-            onClick={() => { navigate("/config"); handleMenuClose(); }}
-            style={buttonStyles("/config")}
-          >
-            Configurar tabla
-          </MenuItem>
-          <MenuItem
-            onClick={() => { navigate("/numbers"); handleMenuClose(); }}
-            style={buttonStyles("/numbers")}
-          >
-            Mi tabla
-          </MenuItem>
-          <MenuItem onClick={() => { handleLogout(); handleMenuClose(); }}>
-            Salir de sesión
-          </MenuItem>
-        </>
-      );
+      return [
+        <MenuItem
+          key="users"
+          onClick={() => { navigate("/users"); handleMenuClose(); }}
+          style={buttonStyles("/users")}
+        >
+          Mis clientes
+        </MenuItem>,
+        <MenuItem
+          key="config"
+          onClick={() => { navigate("/config"); handleMenuClose(); }}
+          style={buttonStyles("/config")}
+        >
+          Configurar tabla
+        </MenuItem>,
+        <MenuItem
+          key="numbers"
+          onClick={() => { navigate("/numbers"); handleMenuClose(); }}
+          style={buttonStyles("/numbers")}
+        >
+          Mi tabla
+        </MenuItem>,
+        <MenuItem key="logout" onClick={() => { handleLogout(); handleMenuClose(); }}>
+          Salir de sesión
+        </MenuItem>
+      ];
     }
   };
 
   return (
     <AppBar
-      position="static"
+      position="fixed" // Asegura que el Navbar esté siempre fijo en la parte superior
       style={{ backgroundColor: "#6b46c1", padding: "0 1rem" }}
     >
       <Toolbar className="flex justify-between items-center">

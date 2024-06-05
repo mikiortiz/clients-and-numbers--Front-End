@@ -147,7 +147,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
       className={`add-user-dialog-container ${open ? "block" : "hidden"}`}
       style={{
         position: "fixed",
-        top: 40,
+        top: 65,
         left: 0,
         width: "100%",
         maxHeight: "100%",
@@ -314,7 +314,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({
               </>
             )}
           </div>
-          <div className="flex mt-8 justify-center space-x-2">
+          <div className="flex mt-4 justify-center space-x-2">
             <button
               onClick={handleAddUser}
               className={`px-4 py-2 bg-purple-500 text-white rounded-xl font-semibold ${
