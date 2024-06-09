@@ -1,7 +1,7 @@
 # EASYCOUNTER
 
 <p align="center">
-  <img src="https://i.postimg.cc/6QgbQ4RT/easy-counter-logo.png" alt="easy-counter-logo.png">
+    <img src="https://i.postimg.cc/dVxKMXp8/clients-and-numbers-logo-Photoroom.png" alt="clients-and-numbers-logo-Photoroom.png">
 </p>
 
 ## Índice
