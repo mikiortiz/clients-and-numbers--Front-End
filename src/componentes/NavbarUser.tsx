@@ -131,7 +131,7 @@ const Navbar = () => {
               textDecoration: location.pathname === "/" ? "underline" : "none",
             }}
           >
-            EasyCOUNTER
+            Client and Numbers
           </Typography>
         </div>
         <div className="flex space-x-4 items-center">
