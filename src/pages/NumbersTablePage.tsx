@@ -3,7 +3,7 @@ import { Chip, LinearProgress } from "@mui/material";
 import AddUserDialog from "../componentes/AddUserDialog";
 import NumberInfoDialog from "../componentes/NumberInfoDialog";
 import MyApi from "../services/MyApi";
-import easyCounterLogo from "../../public/images/easy-counter-logo.png";
+import clientsAndNumbersLogo from "../../public/images/clients-and-numbers.logo-Photoroom.png";
 import { CheckIcon } from "@heroicons/react/24/solid";
 const NumberTable: React.FC = () => {
   const [numbers, setNumbers] = useState<number[]>([]);
@@ -74,7 +74,7 @@ const NumberTable: React.FC = () => {
       {loading ? (
         <div className="flex justify-center items-center flex-col space-y-4">
           <img
-            src={easyCounterLogo}
+            src={clientsAndNumbersLogo}
             alt="Easy Counter Logo"
             className="w-32 h-auto animate-spin"
           />

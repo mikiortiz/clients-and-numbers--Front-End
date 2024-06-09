@@ -5,17 +5,17 @@ import {
   ShieldCheckIcon,
   SparklesIcon,
 } from "@heroicons/react/24/solid";
-import easyCounterLogo from "../../public/images/easy-counter-logo.png";
+import clientsAndNumbersLogo from "../../public/images/clients-and-numbers.logo-Photoroom.png";
 
 const HomePage: React.FC = () => {
   return (
     <div className="flex flex-col items-center p-6">
       <h1 className="text-5xl font-bold text-purple-700 mb-3 text-center sm:text-left">
-        Bienvenidos a EasyCOUNTER
+        Bienvenidos a Clients and Numbers
       </h1>
 
       <p className="text-lg text-center mb-8">
-        ¡Hola y bienvenidos a EasyCOUNTER! Si buscas una forma innovadora y
+        ¡Hola y bienvenidos a Clients and Numbers! Si buscas una forma innovadora y
         divertida de gestionar a tus clientes y asignarles números, ¡estás en el
         lugar correcto! Nuestra aplicación está diseñada para facilitarte la
         vida y ayudarte a mantener todo bajo control de manera eficiente y
@@ -24,10 +24,10 @@ const HomePage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-center items-start w-full mb-4">
         <div className="w-full sm:w-1/3 p-4 bg-gray-100 rounded-lg sm:mr-4 mb-4 sm:mb-0 border-2 border-purple-300 hover:shadow-lg">
           <h2 className="animate-pulse text-lg font-semibold mb-2 text-purple-700">
-            ¿Qué es EasyCOUNTER?
+            ¿Qué es Clients and Numbers?
           </h2>
           <p>
-            EasyCOUNTER es tu asistente personal para la gestión de clientes y
+            Clients and Numbers es tu asistente personal para la gestión de clientes y
             números. Nuestra plataforma te permite organizar fácilmente tu base
             de datos de clientes y asignarles números de referencia para
             diferentes propósitos, desde rifas hasta entradas para eventos.
@@ -35,17 +35,17 @@ const HomePage: React.FC = () => {
         </div>
         <div className="flex justify-center w-full sm:w-auto">
           <img
-            src={easyCounterLogo}
-            alt="Easy Counter Logo"
+            src={clientsAndNumbersLogo}
+            alt="Clients and Numbers Logo"
             className="w-64 h-auto mt-8 mb-8 sm:mt-20 sm:mb-0 text-center animate-bounce"
           />
         </div>
         <div className="w-full sm:w-1/3 p-4 bg-gray-100 rounded-lg sm:ml-4 mb-4 sm:mb-0 border-2 border-purple-300 hover:shadow-lg">
           <h2 className="animate-pulse text-lg font-semibold mb-2 text-purple-700">
-            ¿Cómo puede ayudarte EasyCOUNTER?
+            ¿Cómo puede ayudarte Clients and Numbers?
           </h2>
           <p>
-            En EasyCOUNTER, hemos diseñado nuestra aplicación pensando en ti.
+            En Clients and Numbers, hemos diseñado nuestra aplicación pensando en ti.
             Sabemos lo importante que es mantener tus datos organizados y
             accesibles, y queremos que disfrutes del proceso. Con una interfaz
             amigable y herramientas potentes, te ayudamos a llevar el control de
@@ -110,16 +110,16 @@ const HomePage: React.FC = () => {
       </div>
 
       <div className="w-full">
-        <p className="text-lg font-semibold mb-2">Únete a EasyCOUNTER hoy</p>
+        <p className="text-lg font-semibold mb-2">Únete a Clients and Numbers hoy</p>
         <div
           className="border-t-2 border-purple-300 my-2"
           style={{ width: "100%", marginLeft: -17 }}
         ></div>
         <p>
-          Únete a la comunidad de EasyCOUNTER y descubre cómo nuestra aplicación
+          Únete a la comunidad de Clients and Numbers y descubre cómo nuestra aplicación
           puede transformar la manera en que gestionas a tus clientes y asignas
           números. Ya sea para rifas, eventos, clubes, o programas de lealtad,
-          EasyCOUNTER es tu solución perfecta.
+          Clients and Numbers es tu solución perfecta.
         </p>
       </div>
     </div>
