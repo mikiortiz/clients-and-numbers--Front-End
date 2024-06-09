@@ -1,7 +1,9 @@
-# EASYCOUNTER
+# Clients and Numbers
 
 <p align="center">
-    <img src="https://i.postimg.cc/dVxKMXp8/clients-and-numbers-logo-Photoroom.png" alt="clients-and-numbers-logo-Photoroom.png">
+    <a href="https://postimg.cc/MnVLVsWT">
+        <img src="https://i.postimg.cc/dVxKMXp8/clients-and-numbers-logo-Photoroom.png" alt="clients-and-numbers-logo-Photoroom.png">
+    </a>
 </p>
 
 ## Índice
@@ -13,14 +15,13 @@
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
 - [Desarrollador](#desarrollador)
 
-
 > [!IMPORTANT]
 > 
 > ### [***Ir a la Aplicación***](https://clients-and-numbers.netlify.app) ➔
 
 ### Descripción del Proyecto:
 
-EASYCONTER es una aplicación web diseñada para facilitar el seguimiento y la gestión de números y usuarios (clientes) mediante tablas configurables. Con EasiCounter, los usuarios pueden crear una tabla personalizada, estableciendo rangos de números y realizando un seguimiento eficiente de estas métricas.
+Clients and Numbers es una aplicación web diseñada para facilitar el seguimiento y la gestión de números y usuarios (clientes) mediante tablas configurables. Con Clients and Numbers, los usuarios pueden crear una tabla personalizada, estableciendo rangos de números y realizando un seguimiento eficiente de estas métricas.
 
 ### Características:
 
