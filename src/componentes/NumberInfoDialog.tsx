@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MyApi from "../services/MyApi";
 import User from "../model/UserType";
-import easyCounterLogo from "../../public/images/easy-counter-logo.png";
+import clientsAndNumbersLogo from "../../public/images/clients-and-numbers.logo-Photoroom.png";
 import { InformationCircleIcon, UserIcon } from "@heroicons/react/24/solid";
 import { LinearProgress } from "@mui/material";
 
@@ -66,7 +66,7 @@ const NumberInfoDialog: React.FC<NumberInfoDialogProps> = ({
           {loading ? (
             <div className="mb-4">
               <img
-                src={easyCounterLogo}
+                src={clientsAndNumbersLogo}
                 alt="Easy Counter Logo"
                 className="w-20 h-auto animate-spin mb-4 ml-12"
               />
