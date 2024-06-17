@@ -39,12 +39,23 @@ const NumberInfoDialog: React.FC<NumberInfoDialogProps> = ({
     fetchUserByNumber();
   }, [selectedNumber]);
 
+  const handleRemoveNumber = async () => {
+    if (user && selectedNumber !== null) {
+      try {
+        await MyApi.removeNumberFromUser(user.username, selectedNumber.toString());
+        onClose();
+      } catch (error) {
+        console.error("Error al desasociar número:", error);
+      }
+    }
+  };
+
   return (
     <div
       className={`number-info-dialog-container ${open ? "block" : "hidden"}`}
       style={{
         position: "fixed",
-        top: 60,
+        top: 75,
         left: 0,
         width: "100%",
         maxHeight: "100%",
@@ -122,10 +133,18 @@ const NumberInfoDialog: React.FC<NumberInfoDialogProps> = ({
         <div className="flex justify-center mt-4">
           <button
             onClick={onClose}
-            className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700"
+            className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700 mr-10"
           >
-            Cerrar
+            Atrás
           </button>
+          {user && (
+            <button
+              onClick={handleRemoveNumber}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 ml-10"
+            >
+              Desasociar
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -97,6 +97,47 @@ const MyApi = {
       throw error;
     }
   },
+
+  removeNumberFromUser: async (username: string, number: string) => {
+    try {
+      const jwtToken = localStorage.getItem("token");
+      const headers = {
+        Authorization: `Bearer ${jwtToken}`,
+      };
+
+      const requestData = {
+        username: username,
+        number: number,
+      };
+
+      const response = await axios.post("/removeNumber", requestData, {
+        headers: headers,
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error al desasociar número ${number} del usuario ${username}:`,
+        error
+      );
+      throw error;
+    }
+  },
+
+  updateUser: async (id: string, updatedUser: Partial<User>): Promise<User> => {
+    try {
+      const jwtToken = localStorage.getItem("token");
+      const headers = {
+        Authorization: `Bearer ${jwtToken}`,
+      };
+
+      const response = await axios.put<User>(`/${id}`, updatedUser, { headers });
+      return response.data;
+    } catch (error) {
+      console.error("Error al actualizar usuario:", error);
+      throw error;
+    }
+  },
 };
 
 export default MyApi;
